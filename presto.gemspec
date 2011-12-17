@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.authors = ["Silviu Rusu"]
   s.email = ["slivuz@gmail.com"]
-  s.homepage = "https://github.com/slivu/presto"
+  s.homepage = "http://prestorb.github.com/"
   s.summary = "Simply Fast and Elegantly Small"
-  s.description = "Rack-based framework offering speed, simplicity and a rational set of utils"
+  s.description = "Simple framework expressing speed, tidiness and an rational set of utils"
 
   s.required_ruby_version = ">= 1.9.2"
 
