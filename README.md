@@ -1,4 +1,4 @@
-**Introducing Presto - a Simple framework expressed by speed, tidiness and a rational set of utils.**
+**Introducing Presto - a Simple framework expressing speed, tidiness and a rational set of utils**
 
 Motto
 ---
