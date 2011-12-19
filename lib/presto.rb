@@ -32,10 +32,14 @@ module Presto
 
     attr_reader :middleware
 
-    # store nodes to be served
+    # nodes to be served
     # @return [Array]
     def nodes
       @nodes ||= Array.new
+    end
+
+    def singleton_nodes
+      @singleton_nodes ||= Array.new
     end
 
     # store default Presto configuration

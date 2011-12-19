@@ -2,11 +2,21 @@
 Quickstart
 ---
 
+**Install**
+
+    $> gem install presto
+
 **Ready**
 
+    require 'presto'
     class MyApp
+    
         include Presto::Api
         http.map
+
+        def index
+            view.render
+        end
     end
 
 **Set**

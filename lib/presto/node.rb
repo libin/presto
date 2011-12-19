@@ -16,7 +16,6 @@ module Presto
     def initialize node
       @node = node
       @namespace = extract_namespace @node
-      @on_init = Array.new
       @tests = Hash.new
     end
 
@@ -50,6 +49,7 @@ module Presto
     def mount
       partition Presto::Partition.new
       partition << @node
+      Presto.singleton_nodes << @node
     end
 
     def mounted?

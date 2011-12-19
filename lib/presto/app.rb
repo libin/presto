@@ -2,7 +2,7 @@ module Presto
   class App
 
     # initializing new App
-    #>
+    #
     #   app = Presto::App.new
     def initialize
       @partitions = Array.new
@@ -29,15 +29,19 @@ module Presto
       @partitions << Presto::Partition.new(namespace, root, &proc)
     end
 
-    # generates an Rack app.
     def map
 
       if @partitions.size == 0
         # if no partitions mounted, mounting all nodes that included Presto::Api
-        @partitions = Presto.nodes.map { |n| n.node.partition }.compact.uniq
+        @partitions = Presto.nodes.map { |n| n.node.partition }
       end
 
-      if @partitions.size == 0
+      # mounting singleton nodes
+      Presto.singleton_nodes.each { |n| @partitions << n.node.partition }
+
+      partitions, presto_middleware = @partitions.compact.uniq, Presto.middleware || Array.new
+
+      if partitions.size == 0
         puts
         puts '*'*50
         puts ' ... No partitions nor nodes mounted, exiting ...'
@@ -45,8 +49,7 @@ module Presto
         puts
         exit 1
       end
-      
-      partitions, presto_middleware = @partitions, Presto.middleware || Array.new
+
       ::Rack::Builder.new do |builder|
 
         partitions.each do |partition|
@@ -54,7 +57,7 @@ module Presto
             node.node.map.each_pair do |action, map|
               map[:routes].each do |route|
                 builder.map route do
-                  
+
                   # middleware used by all nodes, unconditionally
                   presto_middleware.each do |m|
                     use m[:ware], *m[:args], &m[:block]

@@ -2,7 +2,7 @@ module Presto
   module Api
 
     module InstanceMixin
-      
+
       # the actual constructor for Presto nodes.
       # Presto initialize an response object on each request.
       # then, the response instance, using this constructor
@@ -30,7 +30,7 @@ module Presto
         @__presto_api_http_instance__ = Presto::HTTP::InstanceApi.new(self, env, action, response)
         @__presto_api_view_instance__ = Presto::View::InstanceApi.new(self, action)
 
-        node.on_init.each { |proc| self.instance_exec(&proc) }
+        (init_proc = node.on_init) && self.instance_exec(&init_proc)
       end
 
       # reader for HTTP Api.
@@ -75,7 +75,7 @@ module Presto
           @__presto_api_view_class__ ||= Presto::View::Api.new(self)
         end
       end
-      
+
       node.class_exec do
         # using #include to exclude #http, #view and #node from served paths.
         include InstanceMixin
