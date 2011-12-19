@@ -57,7 +57,7 @@ class OptsSetByPartition
   end
 
   def render_haml_file
-    view.render_haml_view("haml-file")
+    view.render_haml_view 'haml-file'
   end
 
 end

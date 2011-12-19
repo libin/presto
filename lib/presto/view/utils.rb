@@ -1,20 +1,49 @@
 module Presto::View
   module InternalUtils
 
-    def context_to_args context
-      scope = scope() || @node_instance || @node
-      scope = context unless context.is_a?(Hash) || context.nil?
-      args = [scope]
-      args << context if context.is_a?(Hash)
-      args
-    end
-
     def split_path path
       path = path.to_s.strip
       ext = ::File.extname(path)
       # returning path if no extension extracted
       return [path, nil] if ext.size == 0
       [path.sub(/#{ext}$/, ""), ext.sub(".", "")]
+    end
+
+    def guess_layout engine = nil
+      ext = guess_extension(engine) if engine
+      if layout_name = layout[@action] || layout['*']
+        '%s/%s.%s' % [layouts_root(), layout_name, ext || ext() || guess_extension(engine())]
+      end
+    end
+
+    def guess_path path_or_action = nil, ext = nil
+
+      path_or_action ||= @action
+      if @node && map = @node.node.map[path_or_action]
+
+        # 1st param is an action.
+        path = map[:path].sub(/^\/+/, '')
+
+      else
+        # splitting given path into path and extension
+        path, extension = split_path(path_or_action)
+        ext = extension if extension
+      end
+
+      # if no extension found yet, use default one or guess it by engine
+      ext ||= ext() || guess_extension(engine())
+
+      if path[0] == '/'
+        '%s.%s' % [path, ext]
+      else
+        '%s/%s.%s' % [path(), path, ext]
+      end
+    end
+
+    def guess_scope_and_context *scope_and_or_context
+      scope, context = scope() || @node_instance || @node, Hash.new
+      scope_and_or_context.each { |a| a.is_a?(Hash) ? context.update(a) : scope = a }
+      [scope, context]
     end
 
     def guess_extension engine
