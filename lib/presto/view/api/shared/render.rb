@@ -11,6 +11,8 @@ module Presto
       #
       # if absolute path given, given file will be rendered.
       #
+      # a custom scope can be passed as first argument.
+      # if any argument is a Hash, it will be used as context.
       #
       # if no extension found in path, it will be searched in node setup,
       # or guessed by engine when engine given explicitly.

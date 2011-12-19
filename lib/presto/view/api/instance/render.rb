@@ -7,6 +7,8 @@ module Presto::View
     #
     # node's self is used as scope,
     # so all node's instance variables and methods available in template files.
+    # also, a custom scope can be passed as first argument.
+    # if any argument is a Hash, it will be used as context.
     def render *scope_and_or_context
       render_action engine(), ext() || guess_extension(engine()), *scope_and_or_context
     end
@@ -14,7 +16,6 @@ module Presto::View
     ENGINES.each_pair do |label, engine|
 
       # same as #render, but it defines engine explicitly.
-      # if no ext passed, it will be guessed
       define_method "render_#{label.downcase}" do |*scope_and_or_context|
         render_action engine, guess_extension(engine), *scope_and_or_context
       end
