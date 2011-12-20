@@ -22,7 +22,7 @@ module Presto
       # @return [String]
       def render_view path_or_action = nil, *scope_and_or_context
 
-        file = guess_path path_or_action
+        file = guess_path path_or_action || @action, ext() || guess_extension(engine())
         scope, context = guess_scope_and_context *scope_and_or_context
 
         template(engine(), file, @action, context).render(scope, context)
@@ -48,7 +48,7 @@ module Presto
 
         # same as #render_view except it defines engine explicitly
         define_method :"render_#{label.downcase}_view" do |path_or_action = nil, *scope_and_or_context|
-          file = guess_path path_or_action, guess_extension(engine)
+          file = guess_path path_or_action || @action, guess_extension(engine)
           scope, context = guess_scope_and_context *scope_and_or_context
           template(engine, file, @action, context).render(scope, context)
         end
@@ -57,7 +57,7 @@ module Presto
 
         # same as #render_layout except it defines engine explicitly
         define_method :"render_#{label.downcase}_layout" do |output = nil, *scope_and_or_context|
-          if file = guess_layout(engine)
+          if file = guess_layout(guess_extension(engine))
             scope, context = guess_scope_and_context *scope_and_or_context
             output = template(engine, file, @action, context).render(scope, context) { output.to_s }
           end

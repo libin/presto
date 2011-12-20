@@ -9,16 +9,14 @@ module Presto::View
       [path.sub(/#{ext}$/, ""), ext.sub(".", "")]
     end
 
-    def guess_layout engine = nil
-      ext = guess_extension(engine) if engine
+    def guess_layout ext = nil
       if layout_name = layout[@action] || layout['*']
         '%s/%s.%s' % [layouts_root(), layout_name, ext || ext() || guess_extension(engine())]
       end
     end
 
-    def guess_path path_or_action = nil, ext = nil
+    def guess_path path_or_action, ext
 
-      path_or_action ||= @action
       if @node && map = @node.node.map[path_or_action]
 
         # 1st param is an action.
@@ -27,11 +25,9 @@ module Presto::View
       else
         # splitting given path into path and extension
         path, extension = split_path(path_or_action)
-        ext = extension if extension
+        # overriding given ext with file ext
+        ext = extension if extension && Tilt.registered?(extension)
       end
-
-      # if no extension found yet, use default one or guess it by engine
-      ext ||= ext() || guess_extension(engine())
 
       if path[0] == '/'
         '%s.%s' % [path, ext]
