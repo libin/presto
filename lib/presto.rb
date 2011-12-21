@@ -5,7 +5,7 @@ require "digest/md5"
 
 module Presto
 
-  VERSION = "0.0.6"
+  VERSION = '0.0.8'
 
   DEBUG_DISABLED = 0.freeze
   DEBUG_LIMITED = 1.freeze
