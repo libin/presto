@@ -10,7 +10,7 @@ Motto
 Speed
 ---
 
-**The main idea behind Presto is to have a wrapper around Rack that adds as low overhead as possible.**
+**The main idea behind Presto is to have a handy wrapper around Rack that adds as low overhead as possible.**
 
 Currently, it adds only about 25%-30% of overhead.  
 So if Rack performs at around 6000 requests per second,  
