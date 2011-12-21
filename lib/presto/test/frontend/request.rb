@@ -35,7 +35,19 @@ module Presto
             end
           end
           return rsp unless opts[:json]
-          [rsp, (::JSON.parse(rsp.body) rescue Hash.new)]
+          json = ::JSON.parse(rsp.body.val) rescue Hash.new
+          # recursively proxying json object.
+          # Note! only values proxied.
+          proxify_json = lambda do |val|
+            if val.is_a?(Hash)
+              val.each_pair { |k, v| val[k] = proxify_json.call(v) }
+              val
+            else
+              proxy val
+            end
+          end
+          json.each_pair { |k, v| json[k] = proxify_json.call(v) }
+          [rsp, json]
         end
 
         def get *args

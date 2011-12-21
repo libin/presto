@@ -8,4 +8,8 @@ class TestFrameworkTest
     end
   end
 
+  def test_json_proxy
+    assert_match 'json proxy test passed', OUTPUT
+  end
+
 end

@@ -1,5 +1,6 @@
 require ::File.expand_path("../_init", ::File.dirname(__FILE__))
 
+require 'json'
 require 'stringio'
 
 module Kernel
@@ -179,6 +180,28 @@ class TestFrameworkTest < MiniTest::Unit::TestCase
         int = proxy 100
         if int == 100 && int <= 100 && int >= 100 && int > 0 && int < 1000
           puts 'proxify fixnums passed'
+        end
+      end
+    end
+
+    def json
+      hash = {
+          '1' => {
+              '1.1' => {
+                  '1.1.1' => '1.1.1'
+              }
+          },
+          '2' => '2'
+      }
+      ::JSON.generate hash
+    end
+
+    node.test :json do
+      should 'return recursively proxified json object' do
+        rsp, json = get_json :json
+        if json['1'].is_a?(Hash) && json['1']['1.1'].is_a?(Hash) &&
+            json['1']['1.1']['1.1.1'] == '1.1.1' && json['2'] == '2'
+          puts 'json proxy test passed'
         end
       end
     end
