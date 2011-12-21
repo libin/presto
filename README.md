@@ -186,7 +186,7 @@ Feedback
 
 Feel free to submit any issues at https://github.com/slivu/presto/issues  
 and ask any questions at http://groups.google.com/group/prestorb  
-or at **#presto.rb** IRC channel on irc.freenode.net
+or at **#prestorb** IRC channel on irc.freenode.net
 
 License
 ---
