@@ -1,4 +1,6 @@
-**Introducing Presto - a Simple framework expressing speed, tidiness and an rational set of utils**
+**Presto is a web framework aimed at speed and simplicity**
+
+Official site: http://prestorb.org/
 
 Motto
 ---
@@ -185,7 +187,8 @@ Feedback
 ---
 
 Feel free to submit any issues at https://github.com/slivu/presto/issues  
-and ask any questions at **#presto.rb** IRC channel on irc.freenode.net
+and ask any questions at http://groups.google.com/group/prestorb  
+or at **#presto.rb** IRC channel on irc.freenode.net
 
 License
 ---
