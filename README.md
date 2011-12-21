@@ -167,9 +167,7 @@ meant you will can write logic and tests using same ink on same paper.
         node.test :index do
             should 'do a simple test' do
                 response = get :index, :test
-                response.body == 'index test'
-                #=> passed
-                assert :equal, 'index test', response.body
+                t { response.body == 'index test' }
                 #=> passed
             end
         end
