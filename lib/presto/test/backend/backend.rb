@@ -21,7 +21,7 @@ module Presto
 
         callback(@setup, :open) unless skip?
 
-        setup.specs.each do |spec|
+        @setup.specs.each do |spec|
 
           evaluator = Frontend.new @app, @node, @setup
 

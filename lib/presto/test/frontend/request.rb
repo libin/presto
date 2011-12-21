@@ -6,8 +6,6 @@ module Presto
         include Utils
         include Assertions
 
-        PROXIES = [:body, :status, :length]
-
         def request opts = {}
 
           return @__presto_test_evaluator_mock_browser__.get('/') if @__presto_test_evaluator_spec_failed__
@@ -18,36 +16,17 @@ module Presto
             node = opts[:args].delete_at(0)
           end
           args, params = Array.new, Hash.new
-          opts[:args].map { |a| a.is_a?(Hash) ? params.update(a) : args << a }
+          opts[:args].each { |a| a.is_a?(Hash) ? params.update(a) : args << a }
           args = [:index] if args.size == 0
           url = node.http.route *args
 
           @__presto_test_evaluator_output__[@__presto_test_evaluator_context_id__] ||= Array.new
-          output = "#{ 'XHR ' if opts[:xhr]}#{method.upcase}: #{node.http.route(*opts[:args])}"
+          output = "#{ 'XHR ' if opts[:xhr]}#{method.upcase}: #{node.http.route(*args)}"
           @__presto_test_evaluator_output__[@__presto_test_evaluator_context_id__] << output
 
           rsp = @__presto_test_evaluator_browser__.send(method, url, params)
-
-          PROXIES.each do |proxied_meth|
-            proxied_obj, instance = rsp.send(proxied_meth), self
-            rsp.define_singleton_method proxied_meth do
-              instance.proxy proxied_obj
-            end
-          end
           return rsp unless opts[:json]
-          json = ::JSON.parse(rsp.body.val) rescue Hash.new
-          # recursively proxying json object.
-          # Note! only values proxied.
-          proxify_json = lambda do |val|
-            if val.is_a?(Hash)
-              val.each_pair { |k, v| val[k] = proxify_json.call(v) }
-              val
-            else
-              proxy val
-            end
-          end
-          json.each_pair { |k, v| json[k] = proxify_json.call(v) }
-          [rsp, json]
+          [rsp, (::JSON.parse(rsp.body) rescue Hash.new)]
         end
 
         def get *args

@@ -134,7 +134,7 @@ module Presto
                           end
                         end
                         if context[:failed?]
-                          puts (prefix*prefix_n) + red('Skipped because of previous error')
+                          puts (prefix*prefix_n) + red('Skipped due to previous error')
                         end
                       end
                       prefix_n -= 2*context_level
@@ -172,7 +172,7 @@ module Presto
                 puts magenta (prefix*prefix_n) + 'should ' + context if context
                 prefix_n += 2 if context
                 errors.each do |error|
-                  puts (prefix*prefix_n) + error
+                  puts '%s %s' % [(prefix*prefix_n), error]
                 end
                 puts
                 prefix_n -= 2 if context
